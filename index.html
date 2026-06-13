@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Components of Labor – The 5 P's | Adele Pillitteri MCN Review</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        .transition-all { transition: all 0.3s ease; }
+        .recall-mode .reveal-text {
+            background-color: #cbd5e1;
+            color: transparent;
+            border-radius: 0.375rem;
+            padding: 0 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            box-shadow: inset 0 0 0 1px #94a3b8;
+        }
+        .recall-mode .reveal-text:hover,
+        .recall-mode .reveal-text.revealed {
+            background-color: #bfdbfe;
+            color: #1e3a8a;
+            box-shadow: none;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 8px; }
+        .content-section { animation: fade 0.3s ease; }
+        @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .quiz-feedback-correct { background-color: #dcfce7; border-left: 4px solid #22c55e; }
+        .quiz-feedback-wrong { background-color: #fee2e2; border-left: 4px solid #ef4444; }
+        .locked-section { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { labor: { light: '#dbeafe', DEFAULT: '#2563eb', dark: '#1e3a8a' } } } }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col md:flex-row font-sans text-slate-800 overflow-hidden">
+
+    <!-- Mobile Header -->
+    <div class="md:hidden bg-labor-dark text-white p-4 flex justify-between items-center shadow-md z-30 shrink-0">
+        <button onclick="toggleMobileMenu()" class="text-white focus:outline-none z-40">
+            <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+        <h1 class="font-bold text-lg absolute left-1/2 transform -translate-x-1/2 pointer-events-none">
+            <i class="fa-solid fa-baby-carriage mr-2"></i> 5 P's of Labor
+        </h1>
+        <div class="w-8"></div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav id="sidebar" class="hidden md:flex flex-col w-full md:w-80 bg-white shadow-2xl h-full absolute md:relative z-30 transition-transform duration-300 shrink-0 border-r border-slate-200">
+        <div class="p-6 bg-gradient-to-br from-labor-dark to-labor text-white hidden md:block shrink-0">
+            <h1 class="font-black text-2xl tracking-wide"><i class="fa-solid fa-hand-fist mr-2"></i> 5 P's of Labor</h1>
+            <p class="text-sm text-slate-200 mt-1 font-medium">Adele Pillitteri · Intrapartum Framework</p>
+        </div>
+        <div class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1 text-sm font-medium">
+                <li><button onclick="showSection('home')" id="btn-home" class="nav-btn w-full text-left px-6 py-3 bg-labor-light text-labor-dark border-r-4 border-labor-dark transition-colors"><i class="fa-solid fa-house w-6 nav-icon"></i><i class="fa-solid fa-lock w-6 hidden"></i> Home / Start</button></li>
+                <li><button onclick="showSection('passage')" id="btn-passage" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-bone w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 1. Passage (Maternal Pelvis)</button></li>
+                <li><button onclick="showSection('passenger')" id="btn-passenger" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-fetus w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 2. Passenger (Fetus)</button></li>
+                <li><button onclick="showSection('powers')" id="btn-powers" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-waveform w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 3. Powers (Contractions)</button></li>
+                <li><button onclick="showSection('position')" id="btn-position" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-people-arrows w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 4. Maternal Position</button></li>
+                <li><button onclick="showSection('psyche')" id="btn-psyche" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-brain w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> 5. Psyche (Psychological)</button></li>
+                <li><button onclick="showSection('mnemonics')" id="btn-mnemonics" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors border-t border-slate-200 mt-2 locked-section"><i class="fa-solid fa-lightbulb w-6 text-labor nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Mnemonics & Clinical Pearls</button></li>
+                <li><button onclick="showSection('final_quiz_sec')" id="btn-final_quiz_sec" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-graduation-cap w-6 text-amber-500 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Final 50‑Item Exam</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-1 h-full overflow-y-auto bg-slate-100 relative w-full">
+        <div class="fixed top-16 md:top-4 right-4 md:right-8 z-40 flex items-center bg-white/90 backdrop-blur px-4 py-3 rounded-full shadow-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors" onclick="toggleRecallMode()">
+            <span class="mr-3 text-sm font-bold text-slate-700 hidden md:inline"><i class="fa-solid fa-brain text-labor mr-1"></i> Active Recall</span>
+            <button id="recall-toggle" class="w-12 h-6 bg-slate-300 rounded-full relative transition-colors duration-300 focus:outline-none shadow-inner pointer-events-none">
+                <div id="recall-knob" class="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform duration-300 shadow"></div>
+            </button>
+        </div>
+
+        <div class="p-4 md:p-8 max-w-6xl mx-auto pb-32">
+            <!-- HOME SECTION -->
+            <section id="home" class="content-section flex flex-col items-center justify-center min-h-[80vh] text-center block">
+                <div class="bg-gradient-to-br from-slate-800 to-labor-dark text-white rounded-3xl shadow-2xl p-10 md:p-16 w-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 text-white opacity-5 pointer-events-none"><i class="fa-solid fa-female text-[20rem]"></i></div>
+                    <div class="relative z-10">
+                        <div class="bg-white/10 backdrop-blur-sm inline-block p-4 rounded-full text-sky-300 mb-6 shadow-sm border border-white/20">
+                            <i class="fa-solid fa-hand-peace text-5xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-300 mb-2 uppercase tracking-widest">Maternal & Child Health Nursing</h3>
+                        <h1 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight drop-shadow-md">Components of the<br>Labor Process</h1>
+                        <div class="bg-white/10 backdrop-blur inline-block px-6 py-3 rounded-full mb-10 border border-white/20">
+                            <p class="text-lg text-white font-medium">The 5 P's of Labor – <strong class="font-black">Adele Pillitteri, 7e</strong></p>
+                        </div>
+                        <button onclick="unlockFirstSection()" class="bg-slate-600 hover:bg-slate-500 text-white font-black py-4 px-10 rounded-full shadow-xl transition-transform hover:scale-105 text-lg flex items-center mx-auto focus:outline-none">
+                            Begin Lecture <i class="fa-solid fa-arrow-right ml-3"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 1. PASSAGE -->
+            <section id="passage" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-bone text-labor mr-4"></i> 1. Passage (Maternal Bony Pelvis & Soft Tissues)</h2>
+                    <p class="mb-4">The passage includes the <strong>bony pelvis</strong> (inlet, midpelvis, outlet) and the <strong>soft tissues</strong> (cervix, vagina, perineum). Pelvic adequacy is essential for vaginal birth.</p>
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div class="bg-slate-50 p-4 rounded-xl"><strong>Pelvis Types (Caldwell‑Moloy)</strong>
+                            <ul class="list-disc pl-5 text-sm mt-2">
+                                <li><span class="reveal-text">Gynecoid (female) – ideal, round inlet, well‑curved sacrum.</span></li>
+                                <li><span class="reveal-text">Android (male) – heart‑shaped, narrow subpubic arch; associated with prolonged labor.</span></li>
+                                <li><span class="reveal-text">Anthropoid – long AP, narrow transverse; favorable for occiput posterior.</span></li>
+                                <li><span class="reveal-text">Platypelloid – flat, shallow; rare.</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl"><strong>Critical Diameters</strong>
+                            <ul class="list-disc pl-5 text-sm mt-2">
+                                <li><span class="reveal-text">Pelvic inlet: transverse (13 cm) and AP (11 cm). Smallest AP = obstetrical conjugate (≥10 cm).</span></li>
+                                <li><span class="reveal-text">Midpelvis: ischial spines (station 0); interspinous diameter (≥10 cm).</span></li>
+                                <li><span class="reveal-text">Outlet: intertuberous diameter (≥11 cm) and pubic arch (>90°).</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-labor-light mt-4 p-3 rounded-lg text-sm"><strong>📏 Clinical relevance:</strong> Cephalopelvic disproportion (CPD) occurs when the passage is too small or passenger too large → obstructed labor → cesarean.</div>
+                    <button onclick="openQuiz('passage')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 2. PASSENGER -->
+            <section id="passenger" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-fetus text-labor mr-4"></i> 2. Passenger (Fetus)</h2>
+                    <p>Factors: <strong>fetal head (skull), attitude, lie, presentation, position, and station</strong>.</p>
+                    <div class="grid md:grid-cols-2 gap-5 mt-3">
+                        <div><strong>💀 Fetal Skull</strong><br><span class="reveal-text">Sutures (sagittal, coronal, lambdoid) allow molding; fontanelles (anterior closes 12–18 mo, posterior at 2 mo). Biparietal diameter (9.25 cm) is smallest transverse.</span></div>
+                        <div><strong>🔄 Attitude (flexion)</strong><br><span class="reveal-text">Complete flexion = chin to chest (suboccipitobregmatic, 9.5 cm) – most favorable. Extension increases diameter (occipitofrontal 12 cm, occipitomental 13.5 cm).</span></div>
+                        <div><strong>⬇️ Lie & Presentation</strong><br><span class="reveal-text">Longitudinal (95%) vs transverse. Cephalic (vertex) is normal; breech (3%) or shoulder (rare).</span></div>
+                        <div><strong>📍 Position & Station</strong><br><span class="reveal-text">Position = relation of fetal occiput to maternal pelvis (LOA most common). Station = level of presenting part relative to ischial spines (0 engaged; -4 to +4).</span></div>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded-lg mt-4"><i class="fa-regular fa-message"></i> <strong>Pillitteri note:</strong> Molding and caput succedaneum are normal adaptations; cephalohematoma (bleeding under periosteum) resolves slowly.</div>
+                    <button onclick="openQuiz('passenger')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 3. POWERS -->
+            <section id="powers" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-waveform text-labor mr-4"></i> 3. Powers (Uterine Contractions + Maternal Pushing)</h2>
+                    <p><strong>Primary powers:</strong> involuntary uterine contractions → effacement and dilation.<br><strong>Secondary powers:</strong> maternal bearing‑down (pushing) after full dilation.</p>
+                    <div class="grid md:grid-cols-2 gap-5 mt-3">
+                        <div><strong>📈 Contraction characteristics</strong><br><span class="reveal-text">Frequency (start to start), duration (seconds), intensity (mild/moderate/strong). Adequate labor: 3–5 contractions/10 min, lasting 45–60 sec, strong by active phase.</span></div>
+                        <div><strong>🔄 Effacement & Dilation</strong><br><span class="reveal-text">Effacement = cervical thinning (0–100%). Primiparas: effacement before dilation; multiparas: occur together. Dilation = 0–10 cm.</span></div>
+                    </div>
+                    <div class="bg-labor-light p-3 rounded-lg mt-4 text-sm"><strong>⚡ Mnemonic "POWER"</strong>: <span class="reveal-text">P – progressive, O – organized waves, W – work of contraction (increment/acme/decrement), E – effacement, R – regular rhythm.</span></div>
+                    <button onclick="openQuiz('powers')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 4. POSITION -->
+            <section id="position" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-people-arrows text-labor mr-4"></i> 4. Maternal Position</h2>
+                    <p>Maternal positioning affects uterine blood flow, pelvic diameters, descent, and maternal comfort.</p>
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div><strong>✅ Upright/ambulation</strong><br><span class="reveal-text">Gravity aids descent; reduces need for oxytocin; shorter first stage. Avoid supine hypotension.</span></div>
+                        <div><strong>✅ Lateral (left side‑lying)</strong><br><span class="reveal-text">Optimal uteroplacental perfusion; reduces aortocaval compression; useful for fetal distress.</span></div>
+                        <div><strong>✅ Squatting / kneeling</strong><br><span class="reveal-text">Increases pelvic outlet diameter (by 1–2 cm); effective for second stage.</span></div>
+                        <div><strong>⚠️ Supine lithotomy</strong><br><span class="reveal-text">Traditional but may impede descent; risk of supine hypotensive syndrome; limited pelvic expansion.</span></div>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded-lg mt-4"><i class="fa-regular fa-clock"></i> <strong>Evidence‑based:</strong> Frequent position changes improve labor outcomes and reduce perineal trauma.</div>
+                    <button onclick="openQuiz('position')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 5. PSYCHE -->
+            <section id="psyche" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-brain text-labor mr-4"></i> 5. Psyche (Psychological State)</h2>
+                    <p>Maternal anxiety, fear, cultural beliefs, support system, and preparation directly influence labor progress and pain perception.</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Stress → catecholamines →</strong> <span class="reveal-text">inhibit uterine contractility, reduce placental perfusion, prolong labor.</span></li>
+                        <li><strong>Continuous labor support (doula/partner) →</strong> <span class="reveal-text">decreased need for analgesia, shorter labor, fewer cesareans.</span></li>
+                        <li><strong>Childbirth education (Lamaze, Bradley) →</strong> <span class="reveal-text">increases self‑efficacy, reduces fear‑tension‑pain cycle.</span></li>
+                        <li><strong>Cultural and language barriers →</strong> <span class="reveal-text">may increase stress; nurse should provide individualized, respectful care.</span></li>
+                    </ul>
+                    <div class="bg-slate-100 p-3 rounded-lg mt-4"><i class="fa-regular fa-heart"></i> <strong>Nursing intervention:</strong> Explain procedures, offer encouragement, advocate for birth preferences, and reduce environmental stressors.</div>
+                    <button onclick="openQuiz('psyche')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- MNEMONICS & PEARLS -->
+            <section id="mnemonics" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-lightbulb text-labor mr-4"></i> Mnemonics & Clinical Pearls</h2>
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div class="bg-indigo-50 p-4 rounded-xl"><strong class="text-indigo-800">🧠 5 P's Recall</strong><br><span class="reveal-text">Passage, Passenger, Powers, Position, Psyche.</span></div>
+                        <div class="bg-indigo-50 p-4 rounded-xl"><strong class="text-indigo-800">📏 Pelvis Types (Caldwell‑Moloy)</strong><br><span class="reveal-text">"GAP" – Gynecoid (ideal), Android (male), Platypelloid (flat). Anthropoid is "APE" – AP elongated.</span></div>
+                        <div class="bg-indigo-50 p-4 rounded-xl"><strong class="text-indigo-800">🔄 Fetal Attitude Mnemonic "FLEX"</strong><br><span class="reveal-text">F – full flexion (9.5 cm), L – less flexion (military 12 cm), E – extended brow (13 cm), X – extreme hyperextension (face, 13.5 cm).</span></div>
+                        <div class="bg-indigo-50 p-4 rounded-xl"><strong class="text-indigo-800">📍 Station</strong><br><span class="reveal-text">"‑3 to +3" – minus above spines, plus below spines. Crowning = station +4/+5.</span></div>
+                        <div class="bg-indigo-50 p-4 rounded-xl"><strong class="text-indigo-800">⚡ Contraction Assessment (3 D's)</strong><br><span class="reveal-text">Duration (seconds), Degree (intensity by palpation), Deflection (frequency).</span></div>
+                        <div class="bg-indigo-50 p-4 rounded-xl"><strong class="text-indigo-800">💊 Powers vs Passenger</strong><br><span class="reveal-text">If powers are adequate but no descent → suspect passenger/passage problem (CPD, malposition).</span></div>
+                    </div>
+                    <button onclick="openQuiz('mnemonics')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Final Exam</button>
+                </div>
+            </section>
+
+            <!-- FINAL EXAM SECTION -->
+            <section id="final_quiz_sec" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center min-h-[60vh] flex flex-col justify-center items-center">
+                    <i class="fa-solid fa-graduation-cap text-8xl text-amber-500 mb-6"></i>
+                    <h2 class="text-4xl font-black text-slate-800 mb-4">Final 50‑Item Exam: The 5 P's of Labor</h2>
+                    <p class="text-lg text-slate-600 mb-8 max-w-2xl">Comprehensive assessment covering all components (Passage, Passenger, Powers, Position, Psyche) plus clinical applications. 75% passing score.</p>
+                    <button onclick="openQuiz('final_quiz')" class="w-full max-w-md bg-slate-800 text-white font-black py-4 rounded-xl shadow-md text-xl">Start Final Exam</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- QUIZ MODAL -->
+    <div id="quiz-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl p-6 md:p-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeQuiz()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            <h2 id="quiz-title" class="text-3xl font-black text-slate-800 mb-2"></h2>
+            <div id="quiz-questions-container" class="space-y-4 mt-4"></div>
+            <button id="quiz-submit-btn" onclick="submitQuiz()" class="mt-8 w-full bg-labor text-white font-bold py-4 rounded-xl shadow-lg">Submit Answers</button>
+            <div id="quiz-result-container" class="hidden mt-6 p-4 rounded-xl bg-slate-100"></div>
+        </div>
+    </div>
+
+    <script>
+        let unlockedSections = ['home'];
+        // QUIZZES (10 questions each)
+        const quizzes = {
+            passage: { title: "Passage (Pelvis & Soft Tissues)", next: "passenger", questions: [
+                { q: "Which pelvic type is considered most favorable for vaginal birth?", options: ["Android", "Anthropoid", "Gynecoid", "Platypelloid"], ans: 2 },
+                { q: "The narrowest diameter of the pelvic inlet is the:", options: ["Transverse diameter", "Obstetrical conjugate", "Diagonal conjugate", "Intertuberous diameter"], ans: 1 },
+                { q: "Station is measured in relation to:", options: ["Pubic symphysis", "Ischial spines", "Sacral promontory", "Coccyx"], ans: 1 },
+                { q: "Adequate pelvic outlet requires an intertuberous diameter of at least:", options: ["8 cm", "10 cm", "11 cm", "13 cm"], ans: 2 },
+                { q: "Which pelvic shape is associated with a heart‑shaped inlet and narrow pubic arch?", options: ["Gynecoid", "Android", "Anthropoid", "Platypelloid"], ans: 1 },
+                { q: "Diagonal conjugate measurement >11.5 cm suggests:", options: ["Inlet contraction", "Adequate pelvis", "Outlet stenosis", "Midpelvis narrowing"], ans: 1 },
+                { q: "Cephalopelvic disproportion (CPD) involves a mismatch between:", options: ["Fetal head and maternal pelvis", "Uterine contractions and cervix", "Maternal position and fetal lie", "Placental size and amniotic fluid"], ans: 0 },
+                { q: "The ischial spines represent which plane of the pelvis?", options: ["Inlet", "Midpelvis", "Outlet", "False pelvis"], ans: 1 },
+                { q: "Which pelvic type is characterized by an elongated anteroposterior diameter and narrow transverse?", options: ["Gynecoid", "Android", "Anthropoid", "Platypelloid"], ans: 2 },
+                { q: "A woman with a platypelloid pelvis is at risk for:", options: ["Arrest of descent due to flattened inlet", "Precipitous labor", "Postpartum hemorrhage", "Preterm birth"], ans: 0 }
+            ]},
+            passenger: { title: "Passenger (Fetus)", next: "powers", questions: [
+                { q: "The smallest anteroposterior diameter of the fetal head in complete flexion is:", options: ["Occipitofrontal (12 cm)", "Suboccipitobregmatic (9.5 cm)", "Occipitomental (13.5 cm)", "Biparietal (9.25 cm)"], ans: 1 },
+                { q: "Which suture joins the two parietal bones?", options: ["Coronal", "Sagittal", "Lambdoid", "Frontal"], ans: 1 },
+                { q: "The anterior fontanelle closes at approximately:", options: ["2 months", "6 months", "12–18 months", "24 months"], ans: 2 },
+                { q: "Fetal attitude refers to:", options: ["Relation of fetal head to maternal pelvis", "Flexion of fetal body parts", "Fetal lie (longitudinal/transverse)", "Station of presenting part"], ans: 1 },
+                { q: "The most common fetal presentation is:", options: ["Breech", "Shoulder", "Face", "Cephalic (vertex)"], ans: 3 },
+                { q: "ROA means:", options: ["Right occiput anterior", "Right occiput posterior", "Left occiput anterior", "Right sacrum anterior"], ans: 0 },
+                { q: "Station 0 indicates:", options: ["Presenting part at the ischial spines", "Floating head", "Crowning", "+2 cm above spines"], ans: 0 },
+                { q: "Which type of fetal lie is incompatible with vaginal delivery?", options: ["Longitudinal", "Oblique", "Transverse", "Breech"], ans: 2 },
+                { q: "Molding of the fetal head is made possible by:", options: ["Fontanelles and sutures", "Caput succedaneum", "Cephalohematoma", "Hydrocephalus"], ans: 0 },
+                { q: "A fetus in complete extension (face presentation) presents which diameter?", options: ["Suboccipitobregmatic", "Occipitofrontal", "Occipitomental", "Biparietal"], ans: 2 }
+            ]},
+            powers: { title: "Powers (Contractions & Pushing)", next: "position", questions: [
+                { q: "Primary powers of labor are:", options: ["Maternal bearing down", "Uterine contractions", "Abdominal muscle effort", "Diaphragmatic pressure"], ans: 1 },
+                { q: "Normal contraction frequency in active labor is:", options: ["1–2 per 10 min", "3–5 per 10 min", "6–8 per 10 min", "Every 30 sec"], ans: 1 },
+                { q: "Which part of the contraction represents the peak intensity?", options: ["Increment", "Acme", "Decrement", "Interval"], ans: 1 },
+                { q: "Effacement is defined as:", options: ["Opening of cervical os", "Thinning of the cervix", "Descent of presenting part", "Molding of fetal head"], ans: 1 },
+                { q: "Full cervical dilation is ____ cm.", options: ["5 cm", "8 cm", "10 cm", "12 cm"], ans: 2 },
+                { q: "Secondary powers (pushing) should be delayed until:", options: ["First stage begins", "Complete dilation", "Contraction every 2 min", "Maternal request"], ans: 1 },
+                { q: "A contraction that lasts >90 seconds may cause:", options: ["Fetal hypoxia", "Rapid dilation", "Maternal exhaustion only", "Increased cervical effacement"], ans: 0 },
+                { q: "The interval between contractions is important for:", options: ["Placental perfusion and fetal oxygenation", "Cervical effacement", "Maternal pushing", "Amniotic fluid reabsorption"], ans: 0 },
+                { q: "Uterine contraction intensity is best assessed by:", options: ["Palpation of fundus", "Patient pain report", "Fetal heart rate", "Duration"], ans: 0 },
+                { q: "Prolonged latent phase (nullipara >20 hr) may be due to:", options: ["Ineffective uterine contractions", "Fetal distress", "Preterm labor", "Placenta previa"], ans: 0 }
+            ]},
+            position: { title: "Maternal Position", next: "psyche", questions: [
+                { q: "The optimal position to prevent supine hypotension is:", options: ["Supine", "Left lateral", "Lithotomy", "Knee‑chest"], ans: 1 },
+                { q: "Which position increases pelvic outlet diameter by 1–2 cm?", options: ["Supine", "Squatting", "Sims'", "Trendelenburg"], ans: 1 },
+                { q: "Upright position during first stage is associated with:", options: ["Shorter first stage, less oxytocin", "Increased risk of cord prolapse", "Higher pain scores", "Faster dilation but more epidural use"], ans: 0 },
+                { q: "Aortocaval compression is best relieved by:", options: ["Trendelenburg position", "Left lateral tilt (wedge under hip)", "Supine with legs elevated", "Knee‑chest position"], ans: 1 },
+                { q: "For a fetus in occiput posterior position, which maternal position may facilitate rotation?", options: ["Supine lithotomy", "Hands‑and‑knees (all‑fours)", "Standing", "Semi‑Fowler's"], ans: 1 },
+                { q: "Which of the following is a disadvantage of lithotomy position?", options: ["Increased perineal trauma risk", "Improved fetal descent", "Decreased risk of hypotension", "Increased pelvic outlet diameter"], ans: 0 },
+                { q: "Ambulation during labor is contraindicated in:", options: ["Premature rupture of membranes with non‑engaged head", "Early latent phase", "After epidural (without clearance)", "Both A and C"], ans: 3 },
+                { q: "Which position maximizes uterine blood flow?", options: ["Supine", "Left lateral recumbent", "Lithotomy", "Trendelenburg"], ans: 1 },
+                { q: "Water immersion during labor can provide pain relief but requires:", options: ["Continuous electronic fetal monitoring", "Strict aseptic technique and contraindications", "Epidural anesthesia", "Restricted to second stage"], ans: 1 },
+                { q: "The nurse should encourage position changes at least every:", options: ["15–30 minutes", "1 hour", "2 hours", "Only when requested"], ans: 0 }
+            ]},
+            psyche: { title: "Psyche (Psychological)", next: "mnemonics", questions: [
+                { q: "High maternal anxiety can lead to increased secretion of:", options: ["Oxytocin", "Catecholamines (epinephrine)", "Progesterone", "Prolactin"], ans: 1 },
+                { q: "Continuous labor support (doula) has been shown to:", options: ["Increase cesarean rate", "Shorten labor and reduce analgesia use", "Increase maternal fever", "Require more inductions"], ans: 1 },
+                { q: "The fear‑tension‑pain cycle was described by:", options: ["Dick‑Read", "Lamaze", "Bradley", "Pillitteri"], ans: 0 },
+                { q: "Which of the following best supports a positive birth experience?", options: ["Strict adherence to hospital routines", "Informed consent and shared decision‑making", "Minimal partner involvement", "Sedation during early labor"], ans: 1 },
+                { q: "Childbirth education classes primarily aim to:", options: ["Eliminate all pain", "Increase maternal self‑efficacy and reduce fear", "Promote cesarean birth", "Discourage breastfeeding"], ans: 1 },
+                { q: "A primigravida with a history of sexual trauma may benefit from:", options: ["Avoiding labor", "Trauma‑informed care and birth planning", "General anesthesia", "Mandatory episiotomy"], ans: 1 },
+                { q: "The presence of a supportive partner during labor is associated with:", options: ["Increased oxytocin levels, improved coping", "Higher postpartum depression", "Prolonged latent phase", "More frequent epidural requests"], ans: 0 },
+                { q: "Nursing actions that reduce maternal anxiety include:", options: ["Explaining procedures before doing them", "Leaving the patient alone to rest", "Using medical jargon to appear competent", "Restricting visitors"], ans: 0 },
+                { q: "Which statement about cultural competence in labor is TRUE?", options: ["All patients prefer same pain management", "Nurses should ask about birth traditions and preferences", "Cultural practices have no effect on labor", "Only language matters"], ans: 1 },
+                { q: "A patient who feels powerless during labor is at risk for:", options: ["Postpartum depression and poor birth satisfaction", "More efficient pushing", "Precipitous delivery", "Decreased need for analgesia"], ans: 0 }
+            ]},
+            mnemonics: { title: "Mnemonics & Pearls", next: "final_quiz_sec", questions: [
+                { q: "The mnemonic 'GAP' for pelvic types includes all EXCEPT:", options: ["Gynecoid", "Android", "Platypelloid", "Anthropoid"], ans: 3 },
+                { q: "In the mnemonic 'FLEX' for fetal attitude, what does 'X' represent?", options: ["Xiphoid", "Extreme hyperextension (face presentation)", "X‑ray", "No meaning"], ans: 1 },
+                { q: "Which of the following is NOT one of the 5 P's of labor?", options: ["Passage", "Powers", "Placenta", "Psyche"], ans: 2 },
+                { q: "The 3 D's of contraction assessment are:", options: ["Duration, Degree, Deflection (frequency)", "Descent, Dilation, Deceleration", "Direct, Diagonal, Distal", "Dilatation, Descent, Duration"], ans: 0 },
+                { q: "Station measurement uses which bony landmark?", options: ["Pubic symphysis", "Ischial spines", "Sacral promontory", "Iliac crest"], ans: 1 },
+                { q: "The most favorable attitude for vaginal delivery is:", options: ["Complete flexion", "Military", "Brow", "Face"], ans: 0 },
+                { q: "Which mnemonic helps recall cardinal movements of labor?", options: ["EDFIRE", "VEAL CHOP", "5 P's", "POWER"], ans: 0 },
+                { q: "A patient with adequate powers but no descent suggests:", options: ["Psychologic inhibition", "Passenger‑passage disproportion", "Need for more oxytocin", "Early latent phase"], ans: 1 },
+                { q: "Which pelvic type mnemonic is 'APE'?", options: ["Anthropoid", "Android", "Gynecoid", "Platypelloid"], ans: 0 },
+                { q: "What does the 'P' in 'POWER' mnemonic stand for?", options: ["Progressive", "Passage", "Pushing", "Placenta"], ans: 0 }
+            ]}
+        };
+        // Build final 50-item quiz (mix from all sections)
+        let finalQ = [];
+        for(let sec of ['passage','passenger','powers','position','psyche','mnemonics']) {
+            finalQ.push(...quizzes[sec].questions.slice(0,8));
+        }
+        while(finalQ.length < 50) finalQ.push({ q: "What is the most common fetal presentation at term?", options: ["Breech", "Shoulder", "Vertex (cephalic)", "Face"], ans: 2 });
+        quizzes.final_quiz = { title: "Final 50-Item Exam: The 5 P's of Labor", next: null, questions: finalQ };
+
+        let currentQuiz = null;
+
+        function unlockFirstSection() { if(!unlockedSections.includes('passage')) { unlockedSections.push('passage'); updateSidebarUI(); } showSection('passage'); }
+        function showSection(sectionId) {
+            if (!unlockedSections.includes(sectionId) && sectionId !== 'home') { alert("Please pass the Active Recall Quiz at the bottom of the previous section to unlock."); return; }
+            document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(sectionId)?.classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-labor-light','text-labor-dark','border-r-4','border-labor-dark'));
+            const activeBtn = document.getElementById('btn-'+sectionId);
+            if(activeBtn) activeBtn.classList.add('bg-labor-light','text-labor-dark','border-r-4','border-labor-dark');
+            if(window.innerWidth < 768) document.getElementById('sidebar').classList.add('hidden');
+        }
+        function updateSidebarUI() {
+            const sections = ['home','passage','passenger','powers','position','psyche','mnemonics','final_quiz_sec'];
+            sections.forEach(sec => {
+                const btn = document.getElementById('btn-'+sec);
+                if(!btn) return;
+                const lock = btn.querySelector('.fa-lock'), icon = btn.querySelector('.nav-icon');
+                if(unlockedSections.includes(sec) || sec==='home') { btn.classList.remove('locked-section'); if(lock) lock.classList.add('hidden'); if(icon) icon.classList.remove('hidden'); }
+                else { btn.classList.add('locked-section'); if(lock) lock.classList.remove('hidden'); if(icon) icon.classList.add('hidden'); }
+            });
+        }
+        function openQuiz(sectionId) { currentQuiz = sectionId; const qd = quizzes[sectionId]; if(!qd) return; document.getElementById('quiz-title').innerHTML = qd.title; const container = document.getElementById('quiz-questions-container'); container.innerHTML = ''; qd.questions.forEach((q, idx) => { let html = `<div class="bg-slate-50 p-4 rounded-xl mb-4"><p class="font-bold mb-3">${idx+1}. ${q.q}</p><div class="space-y-2">`; q.options.forEach((opt,oi) => { html += `<label class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white cursor-pointer"><input type="radio" name="q${idx}" value="${oi}" class="form-radio text-labor"><span>${opt}</span></label>`; }); html += `</div><div class="feedback-${idx} text-sm mt-2 hidden"></div></div>`; container.innerHTML += html; }); document.getElementById('quiz-submit-btn').classList.remove('hidden'); document.getElementById('quiz-result-container').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('hidden'); }
+        function closeQuiz() { document.getElementById('quiz-modal').classList.add('hidden'); }
+        function submitQuiz() {
+            const qd = quizzes[currentQuiz];
+            if(!qd) return;
+            let score = 0;
+            for(let i=0; i<qd.questions.length; i++) {
+                const sel = document.querySelector(`input[name="q${i}"]:checked`);
+                if(sel && parseInt(sel.value)===qd.questions[i].ans) score++;
+                const fbDiv = document.querySelector(`.feedback-${i}`);
+                if(fbDiv){
+                    fbDiv.classList.remove('hidden');
+                    const correctTxt = qd.questions[i].options[qd.questions[i].ans];
+                    if(sel && parseInt(sel.value)===qd.questions[i].ans) { fbDiv.innerHTML='<span class="text-green-700">✓ Correct</span>'; fbDiv.parentElement?.classList.add('quiz-feedback-correct'); }
+                    else { const selectedTxt = sel? qd.questions[i].options[parseInt(sel.value)]:"No answer"; fbDiv.innerHTML=`<span class="text-red-700">✗ Incorrect. Correct: ${correctTxt}. You answered: ${selectedTxt}</span>`; fbDiv.parentElement?.classList.add('quiz-feedback-wrong'); }
+                }
+            }
+            let percent = (score/qd.questions.length)*100;
+            let resultDiv = document.getElementById('quiz-result-container');
+            document.getElementById('quiz-submit-btn').classList.add('hidden');
+            resultDiv.classList.remove('hidden');
+            if(percent>=75){
+                if(currentQuiz==='final_quiz'){ resultDiv.innerHTML=`<div class="text-green-600 text-4xl text-center">🎉 Excellent! Score ${score}/${qd.questions.length} (${percent}%)<br>You mastered the 5 P's of Labor</div><button onclick="closeQuiz()" class="mt-4 bg-labor text-white px-6 py-2 rounded-xl">Close</button>`; return; }
+                if(quizzes[currentQuiz].next && !unlockedSections.includes(quizzes[currentQuiz].next)) unlockedSections.push(quizzes[currentQuiz].next);
+                if(quizzes[currentQuiz].next === 'mnemonics' && !unlockedSections.includes('final_quiz_sec')) unlockedSections.push('final_quiz_sec');
+                updateSidebarUI();
+                resultDiv.innerHTML=`<div class="text-green-600 text-3xl text-center">✅ Passed! (${score}/${qd.questions.length})</div><button onclick="closeQuiz(); showSection('${quizzes[currentQuiz].next}')" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-xl">Unlock Next Section</button>`;
+            } else { resultDiv.innerHTML=`<div class="text-red-600 text-3xl text-center">❌ Failed: ${score}/${qd.questions.length} (${percent}%)<br>Need 75%</div><button onclick="openQuiz('${currentQuiz}')" class="mt-4 bg-slate-600 text-white px-6 py-2 rounded-xl">Try Again</button>`; }
+        }
+        function toggleRecallMode() { const active = !document.body.classList.contains('recall-mode'); const toggle=document.getElementById('recall-toggle'),knob=document.getElementById('recall-knob'); if(active){ document.body.classList.add('recall-mode'); toggle.classList.add('bg-labor-dark'); knob.classList.add('translate-x-6'); } else { document.body.classList.remove('recall-mode'); toggle.classList.remove('bg-labor-dark'); knob.classList.remove('translate-x-6'); } }
+        function toggleMobileMenu() { const s=document.getElementById('sidebar'); if(s.classList.contains('hidden')) s.classList.remove('hidden','flex','absolute','h-full','z-50'); else s.classList.add('hidden'); }
+        document.addEventListener('DOMContentLoaded', () => { updateSidebarUI(); document.querySelectorAll('.reveal-text').forEach(el => el.addEventListener('click', function(){ if(document.body.classList.contains('recall-mode')) this.classList.toggle('revealed'); })); });
+    </script>
+</body>
+</html>
